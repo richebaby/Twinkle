@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Twinkle ✦ RicheBaby.Club</title>
+<meta name="description" content="Your personal stylist at RicheBaby.Club — meet Twinkle.">
+<meta property="og:title" content="Twinkle ✦ RicheBaby.Club">
+<meta property="og:description" content="Chat with Twinkle — your personal luxury lingerie stylist.">
+<meta property="og:image" content="https://richebaby.club/cdn/shop/files/RicheBabyClub.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #c9a96e;
+    --gold-light: #e0c080;
+    --gold-dim: rgba(201,169,110,0.15);
+    --bg: #080808;
+    --surface: #141210;
+    --surface2: #1c1916;
+    --border: rgba(255,255,255,0.07);
+    --border-gold: rgba(201,169,110,0.25);
+    --text: #f0ebe4;
+    --text-muted: #7a7068;
+    --text-dim: #3a3530;
+    --green: #7ecb8f;
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'Jost', sans-serif;
+  }
+
+  html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Ambient background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -40%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(201,169,110,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -30%;
+    left: -20%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(201,169,110,0.03) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ─── Header ─── */
+  .header {
+    padding: 16px 20px 14px;
+    border-bottom: 0.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    flex-shrink: 0;
+    backdrop-filter: blur(10px);
+    background: rgba(8,8,8,0.9);
+  }
+
+  .avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #b8924a 0%, #e8c89d 50%, #c9a96e 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: #1a0e00;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 1px rgba(201,169,110,0.3);
+  }
+
+  .status-dot {
+    width: 9px;
+    height: 9px;
+    background: var(--green);
+    border-radius: 50%;
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    border: 2px solid var(--bg);
+    animation: breathe 2.5s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .header-info { flex: 1; }
+
+  .header-name {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .header-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    margin-top: 1px;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .mode-btn {
+    padding: 5px 11px;
+    border-radius: 20px;
+    font-size: 10.5px;
+    font-family: var(--font-body);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 0.5px solid var(--border);
+    color: var(--text-muted);
+    background: transparent;
+  }
+
+  .mode-btn.active {
+    background: var(--gold-dim);
+    border-color: var(--border-gold);
+    color: var(--gold);
+  }
+
+  /* ─── Messages ─── */
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .messages::-webkit-scrollbar { width: 2px; }
+  .messages::-webkit-scrollbar-track { background: transparent; }
+  .messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+  .msg {
+    display: flex;
+    flex-direction: column;
+    max-width: 85%;
+    animation: msgIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(8px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .msg.user { align-self: flex-end; align-items: flex-end; }
+  .msg.bot { align-self: flex-start; align-items: flex-start; }
+
+  .bubble {
+    padding: 11px 16px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.65;
+    font-weight: 300;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .msg.user .bubble {
+    background: var(--gold);
+    color: #1a0e00;
+    border-radius: 18px 18px 5px 18px;
+    font-weight: 400;
+  }
+
+  .msg.bot .bubble {
+    background: var(--surface);
+    color: var(--text);
+    border: 0.5px solid var(--border);
+    border-radius: 5px 18px 18px 18px;
+  }
+
+  .msg.bot .bubble em {
+    color: var(--gold);
+    font-style: italic;
+    font-family: var(--font-display);
+    font-size: 15.5px;
+  }
+
+  /* ─── Quick replies ─── */
+  .quick-replies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 9px;
+  }
+
+  .qr-btn {
+    padding: 7px 14px;
+    border: 0.5px solid var(--border-gold);
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-family: var(--font-body);
+    font-weight: 400;
+    color: var(--gold);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.18s;
+    letter-spacing: 0.02em;
+  }
+
+  .qr-btn:hover, .qr-btn:active {
+    background: var(--gold-dim);
+    border-color: var(--gold);
+    transform: scale(0.98);
+  }
+
+  /* ─── Product card ─── */
+  .product-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border-gold);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 10px;
+    width: 230px;
+    transition: border-color 0.2s;
+  }
+
+  .product-card:hover { border-color: var(--gold); }
+
+  .product-img {
+    width: 100%;
+    height: 150px;
+    background: linear-gradient(160deg, #221b12 0%, #141008 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .product-img-text {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-style: italic;
+    color: rgba(201,169,110,0.25);
+    letter-spacing: 0.05em;
+    text-align: center;
+    padding: 0 20px;
+    line-height: 1.4;
+  }
+
+  .color-swatches {
+    display: flex;
+    gap: 6px;
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+  }
+
+  .swatch {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  .swatch:hover { transform: scale(1.3); }
+  .swatch.navy { background: #1a2744; }
+  .swatch.burgundy { background: #6b1b2a; }
+  .swatch.blush { background: #e8b4b8; }
+
+  .product-info { padding: 12px 14px 14px; }
+
+  .product-name {
+    font-family: var(--font-display);
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+  }
+
+  .product-price {
+    font-size: 13px;
+    color: var(--gold);
+    font-weight: 500;
+    margin-top: 3px;
+    letter-spacing: 0.02em;
+  }
+
+  .product-detail {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-top: 5px;
+    line-height: 1.5;
+  }
+
+  .stars {
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+
+  .buy-btn {
+    display: block;
+    width: 100%;
+    padding: 9px;
+    background: var(--gold);
+    color: #1a0e00;
+    border: none;
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.18s, transform 0.15s;
+    margin-top: 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .buy-btn:hover { background: var(--gold-light); transform: scale(0.99); }
+
+  /* ─── Lead capture form ─── */
+  .lead-form {
+    background: var(--surface);
+    border: 0.5px solid var(--border-gold);
+    border-radius: 14px;
+    padding: 16px;
+    margin-top: 10px;
+    width: 240px;
+  }
+
+  .lead-form-title {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .lead-form p {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .lead-form input {
+    width: 100%;
+    padding: 9px 12px;
+    background: rgba(255,255,255,0.04);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 300;
+    margin-bottom: 8px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  .lead-form input:focus { border-color: var(--border-gold); }
+  .lead-form input::placeholder { color: var(--text-dim); }
+
+  .lead-submit {
+    width: 100%;
+    padding: 9px;
+    background: transparent;
+    border: 0.5px solid var(--gold);
+    color: var(--gold);
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .lead-submit:hover { background: var(--gold-dim); }
+
+  /* ─── Typing indicator ─── */
+  .typing-wrap {
+    align-self: flex-start;
+    animation: msgIn 0.2s ease;
+  }
+
+  .typing {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 13px 17px;
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 5px 18px 18px 18px;
+    width: fit-content;
+  }
+
+  .typing span {
+    width: 5px;
+    height: 5px;
+    background: var(--gold);
+    border-radius: 50%;
+    opacity: 0.35;
+    animation: dot 1.3s ease-in-out infinite;
+  }
+
+  .typing span:nth-child(2) { animation-delay: 0.18s; }
+  .typing span:nth-child(3) { animation-delay: 0.36s; }
+
+  @keyframes dot {
+    0%, 80%, 100% { opacity: 0.35; transform: scale(1); }
+    40% { opacity: 1; transform: scale(1.25); }
+  }
+
+  /* ─── Lead captured notice ─── */
+  .lead-notice {
+    background: rgba(126,203,143,0.07);
+    border: 0.5px solid rgba(126,203,143,0.2);
+    border-radius: 9px;
+    padding: 10px 13px;
+    font-size: 12px;
+    color: #7ecb8f;
+    margin-top: 9px;
+    line-height: 1.6;
+    width: 230px;
+  }
+
+  /* ─── Input area ─── */
+  .input-wrap {
+    flex-shrink: 0;
+    background: rgba(8,8,8,0.95);
+    backdrop-filter: blur(10px);
+    border-top: 0.5px solid var(--border);
+    padding: 12px 14px 16px;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  textarea {
+    flex: 1;
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 22px;
+    padding: 11px 16px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 300;
+    resize: none;
+    outline: none;
+    max-height: 110px;
+    line-height: 1.5;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  textarea:focus { border-color: var(--border-gold); }
+  textarea::placeholder { color: var(--text-dim); }
+
+  .send-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.18s, transform 0.15s;
+    flex-shrink: 0;
+  }
+
+  .send-btn:hover { background: var(--gold-light); }
+  .send-btn:active { transform: scale(0.93); }
+
+  .send-btn svg {
+    width: 17px;
+    height: 17px;
+    fill: #1a0e00;
+    transform: translateX(1px);
+  }
+
+  /* ─── Branding footer ─── */
+  .powered-by {
+    text-align: center;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+    padding-top: 6px;
+  }
+
+  .powered-by a {
+    color: rgba(201,169,110,0.3);
+    text-decoration: none;
+  }
+
+  /* ─── Desktop breakpoint ─── */
+  @media (min-width: 520px) {
+    .app {
+      height: 100vh;
+      border-left: 0.5px solid var(--border);
+      border-right: 0.5px solid var(--border);
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <div class="avatar">
+      T
+      <div class="status-dot"></div>
+    </div>
+    <div class="header-info">
+      <div class="header-name">Twinkle ✦</div>
+      <div class="header-sub">RicheBaby.Club · Your Stylist</div>
+    </div>
+    <div class="header-actions">
+      <button class="mode-btn active" id="btn-chat" onclick="setMode('chat')">Chat</button>
+      <button class="mode-btn" id="btn-outreach" onclick="setMode('outreach')">Outreach</button>
+      <button class="mode-btn" id="btn-followup" onclick="setMode('followup')">Follow-up</button>
+    </div>
+  </div>
+
+  <div class="messages" id="messages"></div>
+
+  <div class="input-wrap">
+    <div class="input-row">
+      <textarea id="userInput" placeholder="Message Twinkle..." rows="1"
+        onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" onclick="sendMessage()" aria-label="Send">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+    <div class="powered-by">Powered by <a href="https://richebaby.club" target="_blank">RicheBaby.Club</a> ✦</div>
+  </div>
+
+</div>
+
+<script>
+const API_KEY_PLACEHOLDER = 'YOUR_ANTHROPIC_API_KEY';
+
+const PROMPTS = {
+  chat: `You are Twinkle, the AI sales assistant for RicheBaby.Club — a Singapore-based luxury lingerie brand by Adora. 
+
+PERSONA: Warm, confident, playful, never pushy. You speak like a stylish friend with impeccable taste. You care about making every woman feel like the main character.
+
+BRAND DNA: "boss bitch to domestic goddess" — for the woman who treats herself like she deserves it.
+
+HERO PRODUCT — know every detail:
+• Name: Midnight Muse Satin Robe
+• Price: SGD $80
+• Colors: Midnight Blue, Burgundy, Blush
+• Size: One Size — fits up to 82kg / 180lbs
+• Dimensions: Length 86cm, Sleeve 62cm, Bust adjustable up to 128cm
+• Features: Premium silky satin, fur-trimmed hem & sleeves, adjustable waist tie, lightweight & breathable, elegant wrap silhouette
+• Care: Hand wash cold, lay flat to dry
+• Real reviews: "Regret not getting them earlier" / "Fabric is soft and fluffy, amazing cut" / "Was too pretty to be worn only at home" / "It's so elegant!"
+• Buy link: https://richebaby.club/collections/frontpage/products/midnight-muse-satin-robe
+
+Also in inventory (mentioned when relevant):
+• Lilac Tie-Side Thong — floral lace, ruffle hip detail, satin ribbon ties. Perfect add-on.
+• White Ruffle Slip — sheer chiffon body, flutter sleeves, underwired lace cup. Coming soon.
+
+SALES GOALS:
+1. Convert visitors — match products to their mood, occasion, or vibe
+2. Capture leads — get name + WhatsApp/IG handle naturally in conversation
+3. Close warm leads — handle hesitation, sizing questions, price objections gently
+4. Be a brand ambassador — every message should feel premium and personal
+
+CONVERSATION RULES:
+• Keep replies SHORT — 2-4 sentences unless showing product
+• Match energy: if casual, be casual. If they're ready, be direct.
+• Use emotional language: moments, feelings, occasions — not specs first
+• When someone seems ready to buy, add [SHOW_PRODUCT] at the very end of your message
+• When capturing a lead, add [LEAD_CAPTURED:name|contact] at the very end
+• Use Italian/French occasionally: "bellissima", "c'est magnifique", "mon amour"
+• Sign off with ✦ sometimes
+• NEVER hard sell. The product sells itself.
+• For sizing questions: one size fits up to 82kg, bust adjustable to 128cm — be reassuring
+• For price hesitation: focus on quality, the fur trim, the satin, the experience
+• Always remind: free shipping with every $100 spend
+
+LEAD CAPTURE: When someone seems interested but hesitates, say: "Want me to keep you in the loop on exclusive drops and offers? Just drop your WhatsApp number or IG handle — I'll pass it to Adora personally." Then use [LEAD_CAPTURED:name|contact]
+
+Respond in under 80 words unless absolutely necessary. No markdown formatting.`,
+
+  outreach: `You are Twinkle, writing Instagram DM cold outreach scripts for RicheBaby.Club.
+
+PRODUCT: Midnight Muse Satin Robe — SGD $80, premium satin + fur trim, three colors (Midnight Blue, Burgundy, Blush), one size fits up to 82kg. Free shipping over $100. Reviews: "too pretty to wear only at home."
+
+BRAND: "boss bitch to domestic goddess" — luxury lingerie & loungewear, Singapore-based.
+
+TARGET: Women in Singapore who post about self-care, luxury, lifestyle, fashion, wellness.
+
+Write 3 short Instagram DM variations. Rules:
+• MAX 3 sentences each
+• Feel handwritten and personal, not template-ish  
+• Reference a detail about her vibe or aesthetic (I'll describe her to you)
+• No hashtags, no emojis overload
+• Soft CTA only: "thought you'd love this" / "link in bio if curious" / "happy to send details"
+• Label clearly: [Soft] [Direct] [Curiosity]
+
+Also optionally write a comment reply script if asked.`,
+
+  followup: `You are Twinkle, writing WhatsApp follow-up sequences for RicheBaby.Club warm leads.
+
+PRODUCT: Midnight Muse Satin Robe — SGD $80. Satin + fur trim. Three colors. One size up to 82kg.
+BRAND VIBE: Intimate luxury. Warm, never pushy. Like a friend who happens to have great taste.
+
+Write a 3-touch WhatsApp follow-up sequence:
+• Touch 1 (Day 1-2): Warm, personal reminder. Reference what they said/asked.
+• Touch 2 (Day 4-5): Add value — a review, a detail they missed, a soft urgency signal (limited stock, new color).
+• Touch 3 (Day 7): Graceful close. No pressure. Leave the door open.
+
+Rules:
+• Each message under 45 words
+• WhatsApp casual — no formal language
+• Include the product link in Touch 1: https://richebaby.club/collections/frontpage/products/midnight-muse-satin-robe
+• Use ✦ once per message
+• Label each: [Touch 1] [Touch 2] [Touch 3]`
+};
+
+let mode = 'chat';
+let history = [];
+let apiKey = API_KEY_PLACEHOLDER;
+
+// Check for API key in localStorage
+if (localStorage.getItem('twinkle_api_key')) {
+  apiKey = localStorage.getItem('twinkle_api_key');
+}
+
+function setMode(m) {
+  mode = m;
+  ['chat','outreach','followup'].forEach(id => {
+    document.getElementById('btn-' + id).classList.toggle('active', id === m);
+  });
+  clearMessages();
+  history = [];
+  if (m === 'chat') startChat();
+  else if (m === 'outreach') {
+    addBotMessage("Who are we targeting? Tell me about her — what does she post about, what's her aesthetic, where is she based? I'll write 3 IG DM variations ready to send. ✦", []);
+  } else {
+    addBotMessage("Tell me about the lead — how did they show interest, what did they ask about, and how long ago? I'll write a 3-touch WhatsApp sequence. ✦", []);
+  }
+}
+
+function clearMessages() {
+  document.getElementById('messages').innerHTML = '';
+}
+
+function startChat() {
+  const opener = "Hey gorgeous ✦\n\nI'm Twinkle — your personal stylist at RicheBaby.Club. Whether you're treating yourself or finding something *beautiful* for someone special, I'm here.\n\nWhat brings you in today?";
+  addBotMessage(opener, [
+    "Show me your hero piece ✦",
+    "I want something for a special night",
+    "Looking for a gift",
+    "Just browsing 🛍️"
+  ]);
+}
+
+function addBotMessage(text, quickReplies, extras) {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = formatText(text);
+  div.appendChild(bubble);
+
+  if (extras?.showProduct) div.appendChild(buildProductCard());
+  if (extras?.leadCaptured) div.appendChild(buildLeadNotice(extras.leadCaptured));
+  if (extras?.showLeadForm) div.appendChild(buildLeadForm());
+
+  if (quickReplies && quickReplies.length > 0) {
+    const qr = document.createElement('div');
+    qr.className = 'quick-replies';
+    quickReplies.forEach(r => {
+      const btn = document.createElement('button');
+      btn.className = 'qr-btn';
+      btn.textContent = r;
+      btn.onclick = () => { document.getElementById('userInput').value = r; sendMessage(); };
+      qr.appendChild(btn);
+    });
+    div.appendChild(qr);
+  }
+
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function formatText(text) {
+  return text
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/\n/g, '<br>');
+}
+
+function buildProductCard() {
+  const card = document.createElement('div');
+  card.className = 'product-card';
+  card.innerHTML = `
+    <div class="product-img">
+      <div class="product-img-text">Midnight Muse<br>Satin Robe</div>
+      <div class="color-swatches">
+        <div class="swatch navy" title="Midnight Blue"></div>
+        <div class="swatch burgundy" title="Burgundy"></div>
+        <div class="swatch blush" title="Blush"></div>
+      </div>
+    </div>
+    <div class="product-info">
+      <div class="product-name">Midnight Muse Satin Robe</div>
+      <div class="product-price">SGD $80</div>
+      <div class="product-detail">Satin · Fur trim · One size (up to 82kg)<br>Midnight Blue · Burgundy · Blush</div>
+      <div class="stars">★★★★★ <span style="color:var(--text-muted);font-size:11px;">4 reviews</span></div>
+      <a class="buy-btn" href="https://richebaby.club/collections/frontpage/products/midnight-muse-satin-robe" target="_blank">Shop Now →</a>
+    </div>`;
+  return card;
+}
+
+function buildLeadNotice(info) {
+  const div = document.createElement('div');
+  div.className = 'lead-notice';
+  div.innerHTML = '✓ Lead saved: <strong>' + info + '</strong><br>Adora will be in touch personally. ✦';
+  return div;
+}
+
+function buildLeadForm() {
+  const form = document.createElement('div');
+  form.className = 'lead-form';
+  form.innerHTML = `
+    <div class="lead-form-title">Stay in the loop ✦</div>
+    <p>Drop your details and Adora will reach out personally with exclusive offers and new drops.</p>
+    <input type="text" id="lf-name" placeholder="Your name" />
+    <input type="text" id="lf-contact" placeholder="WhatsApp or IG handle" />
+    <button class="lead-submit" onclick="submitLead()">Send to Adora →</button>`;
+  return form;
+}
+
+function submitLead() {
+  const name = document.getElementById('lf-name')?.value?.trim();
+  const contact = document.getElementById('lf-contact')?.value?.trim();
+  if (!name || !contact) return;
+  const info = name + ' · ' + contact;
+  const notice = buildLeadNotice(info);
+  document.querySelector('.lead-form')?.replaceWith(notice);
+  history.push({ role: 'user', content: 'I just submitted my details: ' + info });
+  setTimeout(() => {
+    addBotMessage("Bellissima — Adora will reach out to you personally. You're going to love what's coming. ✦", []);
+    history.push({ role: 'assistant', content: "Bellissima — Adora will reach out to you personally. You're going to love what's coming. ✦" });
+  }, 400);
+}
+
+function addUserMessage(text) {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg user';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.textContent = text;
+  div.appendChild(bubble);
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addTyping() {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'typing-wrap';
+  div.id = 'typing-indicator';
+  div.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  document.getElementById('typing-indicator')?.remove();
+}
+
+async function sendMessage() {
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  // API key check
+  if (apiKey === API_KEY_PLACEHOLDER) {
+    const key = prompt('Enter your Anthropic API key to activate Twinkle:');
+    if (!key) return;
+    apiKey = key;
+    localStorage.setItem('twinkle_api_key', key);
+  }
+
+  addUserMessage(text);
+  input.value = '';
+  input.style.height = 'auto';
+  history.push({ role: 'user', content: text });
+  addTyping();
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: PROMPTS[mode],
+        messages: history
+      })
+    });
+
+    const data = await res.json();
+    removeTyping();
+
+    if (!res.ok) {
+      addBotMessage("Something went sideways, darling — " + (data.error?.message || 'please try again') + " ✦", []);
+      return;
+    }
+
+    let reply = data.content?.[0]?.text || "Something went wrong. Try again? ✦";
+    let showProduct = false, leadCaptured = null, showLeadForm = false;
+
+    if (reply.includes('[SHOW_PRODUCT]')) {
+      showProduct = true;
+      reply = reply.replace('[SHOW_PRODUCT]', '').trim();
+    }
+
+    if (reply.includes('[SHOW_LEAD_FORM]')) {
+      showLeadForm = true;
+      reply = reply.replace('[SHOW_LEAD_FORM]', '').trim();
+    }
+
+    const lm = reply.match(/\[LEAD_CAPTURED:(.*?)\]/);
+    if (lm) {
+      leadCaptured = lm[1];
+      reply = reply.replace(lm[0], '').trim();
+    }
+
+    history.push({ role: 'assistant', content: reply });
+    addBotMessage(reply, [], { showProduct, leadCaptured, showLeadForm });
+
+  } catch (e) {
+    removeTyping();
+    addBotMessage("Connection issue — give it a moment and try again? ✦", []);
+  }
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 110) + 'px';
+}
+
+// Init
+startChat();
+</script>
+</body>
+</html>
